@@ -27,11 +27,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:3000"
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
 INSTALLED_APPS = [
     'rest_framework',
+    'corsheaders',
     'api.apps.ApiConfig',
     'main.apps.MainConfig',
     'django.contrib.admin',
@@ -43,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,7 +78,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pg.wsgi.application'
 
 
 # Database
@@ -83,6 +90,16 @@ DATABASES = {
     }
 }
 
+# AUTH_USER_MODEL = "customauth.Engseignant"
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTIFICATION_CLASSES': (
+        'rest_framework.authentifictaion.SessinAuthentification',
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -5,6 +5,7 @@ class DoctorantAdmin(admin.ModelAdmin):
     list_display = ['id', 'nom']  # Specify the fields to display in the list view
 admin.site.register(Doctorant, DoctorantAdmin)
 
+
 class EnseignantAdmin(admin.ModelAdmin):
     list_display = ['id', 'nom']
 admin.site.register(Enseignant,EnseignantAdmin)

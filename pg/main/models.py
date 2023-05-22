@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import FileExtensionValidator
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -36,12 +36,10 @@ class Publication(models.Model):
     ID_Doctorantt =models.ForeignKey(Doctorant,on_delete=models.CASCADE,default=0)
 
 
-    
-
-
 
 class Enseignant(models.Model):
      id = models.AutoField(primary_key=True)
+     user = models.OneToOneField(User, related_name='enseignant', null=True, blank=True, default=True, on_delete=models.CASCADE)
      nom=models.CharField(max_length=50,null=True)
      prenom=models.CharField(max_length=50,null=True)
      date_de_naissance= models.DateField()
@@ -52,8 +50,23 @@ class Enseignant(models.Model):
      Domain_competence  = models.CharField(max_length=10, choices=Domain_competence, default='option1')
      OPTION_CHOICES = [('externe', 'Externe'),('interne', 'Interne'),]
      my_field = models.CharField(max_length=10, choices=OPTION_CHOICES, default='option1')
-     username = models.CharField(max_length=150,default=0)
-     password = models.CharField(max_length=128,default=0)
+     
+     def create_user(self):
+         if not self.user:
+             user = User.objects.create(
+                 id = self.id,
+                 nom = self.nom,
+                 prenom = self.prenom,
+                 date_de_naissance = self.date_de_naissance,
+                 telephone = self.Telephone,
+                 adresse_email = self.adresse_email,
+                 domain_competence = self.Domain_competence,
+                 my_field = self.my_field,
+             )
+             self.user = user
+             self.save()
+             
+
      def __str__(self):
          return f'{self.id} - {self.nom} {self.prenom}'
      def __str__(self):
